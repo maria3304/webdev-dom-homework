@@ -8,7 +8,7 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
+      <ul id= "comments" class="comments">
         <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
@@ -67,5 +67,50 @@
     "use strict";
     // Код писать здесь
     console.log("It works!");
+    const comments = document.getElementById("comments");
+    const addFormButton = document.querySelector(".add-form-button");
+    const addFormName = document.querySelector(".add-form-name");
+    const addFormText = document.querySelector(".add-form-text")
+
+
+    addFormButton.addEventListener("click", () => {
+      addFormName.style.backgroundColor = '';
+       addFormText.style.backgroundColor = '';
+      if (addFormName.value === "") {
+        addFormName.style.backgroundColor = 'red';
+        return;
+      } else if (addFormText.value === "") {
+        addFormText.style.backgroundColor = 'red';
+        return;
+      } else {
+      let now = new Date();
+      let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
+      const oldComments = comments.innerHTML;
+      comments.innerHTML = oldComments + 
+      `<li class="comment">
+          <div class="comment-header">
+            <div>${addFormName.value}</div> 
+            <div>${data}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${addFormText.value}  
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">0</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>
+      `;
+      addFormName.value = "";
+      addFormText.value = "";
+    }})
+
+
+
+
   </script>
 </html>
