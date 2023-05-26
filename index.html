@@ -9,40 +9,6 @@
   <body>
     <div class="container">
       <ul id= "comments" class="comments">
-        <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
       </ul>
       <div class="add-form">
         <input
@@ -67,13 +33,13 @@
     "use strict";
     // Код писать здесь
 
-    // const comments = document.getElementById("comments");
+    const comments = document.getElementById("comments");
     const addFormButton = document.querySelector(".add-form-button");
     const addFormName = document.querySelector(".add-form-name");
     const addFormText = document.querySelector(".add-form-text");
     const likesCounterElements = document.querySelectorAll('.likes-counter');
 
-    const comments = [
+    const commentsArray = [
       {
         name: 'Глеб Фокин',
         date: '12.02.22 12:18',
@@ -89,7 +55,7 @@
     ]
 
     const renderComments = () => {
-      const commentsHTML = comments.map((comment, index) => {
+      const commentsHTML = commentsArray.map((comment, index) => {
         return `<li class="comment">
           <div class="comment-header">
             <div>${comment.name}</div> 
@@ -118,6 +84,8 @@
           likeButton.addEventListener("click", () => {  
           const index = likeButton.dataset.index;
           console.log(index);
+          commentsArray[index].likes += 1;
+          renderComments();
   })
 }}
     
@@ -147,9 +115,6 @@
       addFormName.value = "";
       addFormText.value = "";
     }})
-
-
-
 
   </script>
 </html>
