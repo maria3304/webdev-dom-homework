@@ -45,12 +45,14 @@
         date: '12.02.22 12:18',
         content: 'Это будет первый комментарий на этой странице',
         likes: 3,
+        likeButtonClasses: 'like-button',
       },
       {
         name: 'Варвара Н.',
         date:'13.02.22 19:22',
         content:'Мне нравится как оформлена эта страница! ❤',
         likes: 75,
+        likeButtonClasses: 'like-button -active-like',
       }
     ]
 
@@ -69,7 +71,7 @@
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">${comment.likes}</span>
-              <button data-index="${index}" class="like-button"></button>
+              <button data-index="${index}" class="${comment.likeButtonClasses}"></button>
             </div>
           </div>
         </li>`;
@@ -81,14 +83,31 @@
     const initLikeButtonListeners = () => {
       const likeButtons = document.querySelectorAll(".like-button");
         for (const likeButton of likeButtons) {
-          likeButton.addEventListener("click", () => {  
           const index = likeButton.dataset.index;
-          console.log(index);
-          commentsArray[index].likes += 1;
-          renderComments();
-  })
+            likeButton.addEventListener("click", () => {  
+              if (commentsArray[index].likeButtonClasses === 'like-button') {
+            
+                commentsArray[index].likes += 1;
+                
+                commentsArray[index].likeButtonClasses = 'like-button -active-like';
+                renderComments();
+              } else {
+                commentsArray[index].likes -= 1;
+                
+                commentsArray[index].likeButtonClasses = 'like-button';
+                renderComments();
+          }
+          })
+        
+                    
 }}
-    
+    // if (likeButton.classList.contains('-active-like') === 'false') {
+    //           const index = likeButton.dataset.index;
+    //           commentsArray[index].likes += 1;
+    //           likeButton.classList.add('-active-like');
+    //           console.log(likeButton.classList);
+    //           renderComments();
+    //         }
     
     renderComments();
 
@@ -104,11 +123,12 @@
       } else {
       let now = new Date();
       let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
-     comment.push({
+     commentsArray.push({
         name: addFormName.value,
         date: data,
         content: addFormText.value,
         likes: 0,
+        likeButtonClasses: 'like-button',
      })
 
      renderComments();
