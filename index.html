@@ -9,7 +9,9 @@
   <body>
     <div class="container">
       <ul id= "comments" class="comments">
+
       <!-- рендерится в js -->
+
       </ul>
       <div class="add-form">
         <input
@@ -83,12 +85,15 @@
       initCommentListeners();
     }
 
+
     const initLikeButtonListeners = () => {
       const likeButtons = document.querySelectorAll(".like-button");
         for (const likeButton of likeButtons) {
           const index = likeButton.dataset.index;
+
             likeButton.addEventListener("click", (event) => {  
               event.stopPropagation();
+
               if (commentsArray[index].likeButtonClasses === 'like-button') {
             
                 commentsArray[index].likes += 1;
@@ -106,6 +111,7 @@
                     
 }}
     
+
     const initCommentListeners = () => {
       const commentButtons = document.querySelectorAll('.comment');
       for (const commentButton of commentButtons) {
@@ -120,6 +126,7 @@
 
   renderComments();
 
+
     addFormButton.addEventListener("click", () => {
       addFormName.style.backgroundColor = '';
        addFormText.style.backgroundColor = '';
@@ -133,9 +140,11 @@
       let now = new Date();
       let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
      commentsArray.push({
+
         name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
         date: data,
         content: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+
         likes: 0,
         likeButtonClasses: 'like-button',
      })
