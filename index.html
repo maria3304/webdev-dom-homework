@@ -36,29 +36,56 @@
     "use strict";
     // Код писать здесь
 
-    const comments = document.getElementById("comments");
+    const comments1 = document.getElementById("comments");
     const addFormButton = document.querySelector(".add-form-button");
     const addFormName = document.querySelector(".add-form-name");
     const addFormText = document.querySelector(".add-form-text");
     const likesCounterElements = document.querySelectorAll('.likes-counter');
-    
+    let commentsArray = [];
 
-    const commentsArray = [
-      {
-        name: 'Глеб Фокин',
-        date: '12.02.22 12:18',
-        content: 'Это будет первый комментарий на этой странице',
-        likes: 3,
-        likeButtonClasses: 'like-button',
-      },
-      {
-        name: 'Варвара Н.',
-        date:'13.02.22 19:22',
-        content:'Мне нравится как оформлена эта страница! ❤',
-        likes: 75,
-        likeButtonClasses: 'like-button -active-like',
-      }
-    ]
+    const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments", {
+      method: "GET",
+    });
+
+    fetchPromise.then((response) => {
+        const jsonPromise = response.json();
+        jsonPromise.then((responseData) => {
+          console.log(responseData);
+          commentsArray = responseData.comments.map((comment) => {
+            let now = new Date(comment.date);
+            let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
+            console.log(now);
+            return {
+              name:comment.author.name,
+              date: data,
+              text: comment.text,
+              likes: comment.likes,
+              //isLiked: false,
+              likeButtonClasses: 'like-button',
+            };
+          });
+          renderComments();
+        });
+      });
+    
+   
+
+    //  const commentsArray = [
+    //    {
+    //      name: 'Глеб Фокин',
+    //      date: '12.02.22 12:18',
+    //      text: 'Это будет первый комментарий на этой странице',
+    //      likes: 3,
+    //      likeButtonClasses: 'like-button',
+    //    },
+    //    {
+    //      name: 'Варвара Н.',
+    //      date:'13.02.22 19:22',
+    //      text:'Мне нравится как оформлена эта страница! ❤',
+    //      likes: 75,
+    //      likeButtonClasses: 'like-button -active-like',
+    //    }
+    //  ]
 
     const renderComments = () => {
       const commentsHTML = commentsArray.map((comment, index) => {
@@ -69,7 +96,7 @@
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${comment.content}  
+              ${comment.text}  
             </div>
           </div>
           <div class="comment-footer">
@@ -80,7 +107,7 @@
           </div>
         </li>`;
       }).join('')
-      comments.innerHTML = commentsHTML;
+      comments1.innerHTML = commentsHTML;
       initLikeButtonListeners();
       initCommentListeners();
     }
@@ -119,12 +146,12 @@
         commentButton.addEventListener('click', (event) => {
           //event.stopPropagation();
           //addFormText.classList.add(".separate");
-          addFormText.value = '> ' + commentsArray[index].content + "\r\n" + commentsArray[index].name + ',';
+          addFormText.value = '> ' + commentsArray[index].text + "\r\n" + commentsArray[index].name + ',';
         })
       }
     }
 
-  renderComments();
+  // renderComments();
 
 
     addFormButton.addEventListener("click", () => {
@@ -137,22 +164,63 @@
         addFormText.style.backgroundColor = 'red';
         return;
       } else {
-      let now = new Date();
-      let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
-     commentsArray.push({
+      // let now = new Date();
+      // let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
+    
+    
+      //  commentsArray.push({
+    //     name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+    //     date: data,
+    //     content: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+    //     likes: 0,
+    //     likeButtonClasses: 'like-button',
+    //  })
 
-        name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-        date: data,
-        content: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
 
-        likes: 0,
-        likeButtonClasses: 'like-button',
-     })
+    const getFetch = () => {
+      
+    
 
-     renderComments();
+        const fetchPromisePost = fetch(
+          'https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+              text: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+            }),
+          });
+
+          fetchPromisePost.then((response) => {
+
+            const jsonPromise = response.json();
+            jsonPromise.then((responseData) => {
+              console.log(responseData);
+              // commentsArray = responseData.comments;
+              console.log(commentsArray);
+          // commentsArray = responseData.comments.map((comment) => {
+          //   let now = new Date(comment.date);
+          //   let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
+          //   return {
+          //     date: data,
+          //     likes: 0,
+          //     likeButtonClasses: 'like-button',
+          //   };
+          // });
+              renderComments();
+            });
+          });
+      };
+      getFetch();
+      location.reload ()
+
+    //  renderComments();
+
       addFormName.value = "";
       addFormText.value = "";
     }})
+
+    console.log(commentsArray);
 
   </script>
 </html>
