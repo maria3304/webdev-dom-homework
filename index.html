@@ -9,7 +9,9 @@
   <body>
     <div class="container">
       <ul id= "comments" class="comments">
+
       <!-- рендерится в js -->
+
       </ul>
       <div class="add-form">
         <input
@@ -110,12 +112,15 @@
       initCommentListeners();
     }
 
+
     const initLikeButtonListeners = () => {
       const likeButtons = document.querySelectorAll(".like-button");
         for (const likeButton of likeButtons) {
           const index = likeButton.dataset.index;
+
             likeButton.addEventListener("click", (event) => {  
               event.stopPropagation();
+
               if (commentsArray[index].likeButtonClasses === 'like-button') {
             
                 commentsArray[index].likes += 1;
@@ -133,6 +138,7 @@
                     
 }}
     
+
     const initCommentListeners = () => {
       const commentButtons = document.querySelectorAll('.comment');
       for (const commentButton of commentButtons) {
@@ -146,6 +152,7 @@
     }
 
   // renderComments();
+
 
     addFormButton.addEventListener("click", () => {
       addFormName.style.backgroundColor = '';
@@ -208,6 +215,7 @@
       location.reload ()
 
     //  renderComments();
+
       addFormName.value = "";
       addFormText.value = "";
     }})
