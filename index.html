@@ -34,7 +34,6 @@
 
   <script>
     "use strict";
-    // Код писать здесь
 
     const comments1 = document.getElementById("comments");
     const addFormButton = document.querySelector(".add-form-button");
@@ -43,32 +42,32 @@
     const likesCounterElements = document.querySelectorAll('.likes-counter');
     let commentsArray = [];
 
-    const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments", {
-      method: "GET",
-    });
 
-    fetchPromise.then((response) => {
-        const jsonPromise = response.json();
-        jsonPromise.then((responseData) => {
-          console.log(responseData);
-          commentsArray = responseData.comments.map((comment) => {
-            let now = new Date(comment.date);
-            let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
-            console.log(now);
-            return {
-              name:comment.author.name,
-              date: data,
-              text: comment.text,
-              likes: comment.likes,
-              //isLiked: false,
-              likeButtonClasses: 'like-button',
-            };
-          });
-          renderComments();
-        });
+    const fetchAndRenderComments = () => {
+      return fetch("https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments", {
+      method: "GET",
+    }).then((response) => {
+      return response.json();
+    }).then((responseData) => {
+      console.log(responseData);
+      commentsArray = responseData.comments.map((comment) => {
+        let now = new Date(comment.date);
+        let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
+        console.log(now);
+        return {
+          name:comment.author.name,
+          date: data,
+          text: comment.text,
+          likes: comment.likes,
+          //isLiked: false,
+          likeButtonClasses: 'like-button',
+        };
       });
+      renderComments();
+    });
+    };
+
     
-   
 
     //  const commentsArray = [
     //    {
@@ -113,6 +112,9 @@
     }
 
 
+    fetchAndRenderComments();
+
+
     const initLikeButtonListeners = () => {
       const likeButtons = document.querySelectorAll(".like-button");
         for (const likeButton of likeButtons) {
@@ -122,9 +124,7 @@
               event.stopPropagation();
 
               if (commentsArray[index].likeButtonClasses === 'like-button') {
-            
                 commentsArray[index].likes += 1;
-                
                 commentsArray[index].likeButtonClasses = 'like-button -active-like';
                 renderComments();
               } else {
@@ -144,14 +144,10 @@
       for (const commentButton of commentButtons) {
         const index = commentButton.dataset.index;
         commentButton.addEventListener('click', (event) => {
-          //event.stopPropagation();
-          //addFormText.classList.add(".separate");
           addFormText.value = '> ' + commentsArray[index].text + "\r\n" + commentsArray[index].name + ',';
         })
       }
     }
-
-  // renderComments();
 
 
     addFormButton.addEventListener("click", () => {
@@ -164,24 +160,10 @@
         addFormText.style.backgroundColor = 'red';
         return;
       } else {
-      // let now = new Date();
-      // let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
-    
-    
-      //  commentsArray.push({
-    //     name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-    //     date: data,
-    //     content: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-    //     likes: 0,
-    //     likeButtonClasses: 'like-button',
-    //  })
-
-
-    const getFetch = () => {
-      
-    
-
-        const fetchPromisePost = fetch(
+        addFormButton.disabled = true;
+        addFormButton.textContent = 'Элемент добавляется...';
+        const getFetch = () => {
+        return fetch(
           'https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments',
           {
             method: 'POST',
@@ -189,36 +171,32 @@
               name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
               text: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
             }),
+          }).then((response) => {
+            return response.json();
+          }).then(() => {
+          return fetchAndRenderComments();
+          })
+          .then((data) => {
+            addFormButton.disabled = false;
+            addFormButton.textContent = 'Добавить';
           });
-
-          fetchPromisePost.then((response) => {
-
-            const jsonPromise = response.json();
-            jsonPromise.then((responseData) => {
-              console.log(responseData);
-              // commentsArray = responseData.comments;
-              console.log(commentsArray);
-          // commentsArray = responseData.comments.map((comment) => {
-          //   let now = new Date(comment.date);
-          //   let data = (now.getDate() + "." + 0 + (Number(now.getMonth()) + 1) + "." + (Number(now.getFullYear()) - 2000) + " " + now.getHours() + ":" + now.getMinutes());
-          //   return {
-          //     date: data,
-          //     likes: 0,
-          //     likeButtonClasses: 'like-button',
-          //   };
-          // });
-              renderComments();
-            });
-          });
-      };
+          // .then((responseData) => {
+          //     console.log(responseData);
+          //     // commentsArray = responseData.comments;
+          //     console.log(commentsArray);
+          //     renderComments();
+          //   });
+          };
+      
       getFetch();
-      location.reload ()
+      renderComments();
+      // location.reload();
 
-    //  renderComments();
 
       addFormName.value = "";
       addFormText.value = "";
-    }})
+    }});
+  
 
     console.log(commentsArray);
 
