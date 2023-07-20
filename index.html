@@ -39,6 +39,7 @@
     const addFormText = document.querySelector(".add-form-text");
     const likesCounterElements = document.querySelectorAll('.likes-counter');
     let commentsArray = [];
+    const addForm = document.querySelector(".add-form");
 
 
     const fetchAndRenderComments = () => {
@@ -144,7 +145,11 @@
 
     addFormButton.addEventListener("click", () => {
       addFormName.style.backgroundColor = '';
-       addFormText.style.backgroundColor = '';
+      addFormText.style.backgroundColor = '';
+      let OneTimeAddFormName = addFormName.value.length;
+      let OneTimeAddFormText = addFormText.value.length;
+      console.log(OneTimeAddFormName);
+
       if (addFormName.value === "") {
         addFormName.style.backgroundColor = 'red';
         return;
@@ -162,15 +167,34 @@
             body: JSON.stringify({
               name: addFormName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
               text: addFormText.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+              forceError: true,
             }),
           }).then((response) => {
+            if(response.status === 500) {
+            // throw new Error("Сервер упал");
+            return Promise.reject('Сервер упал');
+          } else if (response.status === 400){
+            alert('Имя и комментарий должны быть от 3х символов');
+            
+          } else {
             return response.json();
+          }
           }).then(() => {
           return fetchAndRenderComments();
           })
           .then((data) => {
             addFormButton.disabled = false;
+            addFormButton.textContent = 'Добавить';  
+            if(OneTimeAddFormName >= 3 && OneTimeAddFormText >= 3) {
+              addFormName.value = "";
+              addFormText.value = "";
+            }
+          })  
+          .catch((error) => {
+            addFormButton.disabled = false;
             addFormButton.textContent = 'Добавить';
+            alert("Кажется что-то пошло не так, попробуй позже")
+            console.warn(error);
           });
           // .then((responseData) => {
           //     console.log(responseData);
@@ -184,12 +208,12 @@
       renderComments();
       // location.reload();
 
-      addFormName.value = "";
-      addFormText.value = "";
+      
     }});
   
 
-    console.log(commentsArray);
+    console.log(commentsArray); 
+    
 
   </script>
 </html>
