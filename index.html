@@ -144,6 +144,7 @@
     }
 
     addFormButton.addEventListener("click", () => {
+      let a = 0;
       addFormName.style.backgroundColor = '';
       addFormText.style.backgroundColor = '';
       let OneTimeAddFormName = addFormName.value.length;
@@ -171,8 +172,10 @@
             }),
           }).then((response) => {
             if(response.status === 500) {
+              a += 1;
+              alert('Сервер сломался, попробуй позже');
             // throw new Error("Сервер упал");
-            return Promise.reject('Сервер упал');
+              return Promise.reject('Сервер упал');
           } else if (response.status === 400){
             alert('Имя и комментарий должны быть от 3х символов');
             
@@ -185,7 +188,7 @@
           .then((data) => {
             addFormButton.disabled = false;
             addFormButton.textContent = 'Добавить';  
-            if(OneTimeAddFormName >= 3 && OneTimeAddFormText >= 3) {
+            if(OneTimeAddFormName >= 3 && OneTimeAddFormText >= 3 ) {
               addFormName.value = "";
               addFormText.value = "";
             }
@@ -193,7 +196,10 @@
           .catch((error) => {
             addFormButton.disabled = false;
             addFormButton.textContent = 'Добавить';
-            alert("Кажется что-то пошло не так, попробуй позже")
+            if(a < 1) {
+              alert("Кажется, у вас сломался интернет, попробуйте позже");
+            };
+            a = 0;
             console.warn(error);
           });
           // .then((responseData) => {
