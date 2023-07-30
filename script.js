@@ -11,10 +11,8 @@ export const addFormName = document.querySelector(".add-form-name");
 export const addFormText = document.querySelector(".add-form-text");
 const likesCounterElements = document.querySelectorAll('.likes-counter');
 
-const addForm = document.querySelector(".add-form");
+const addForm = document.querySelector(".add-form");   
 export let commentsArray = [];
-
-
 
 
 fetchAndRenderComments().then((responseData) => {
