@@ -139,3 +139,7 @@ body {
   .separate {
     white-space: pre-line;
   }
+
+  .block {
+    display: block;
+  }
