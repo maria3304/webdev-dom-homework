@@ -11,10 +11,8 @@ export const addFormName = document.querySelector(".add-form-name");
 export const addFormText = document.querySelector(".add-form-text");
 const likesCounterElements = document.querySelectorAll('.likes-counter');
 
-const addForm = document.querySelector(".add-form");
+const addForm = document.querySelector(".add-form");   
 export let commentsArray = [];
-
-
 
 
 fetchAndRenderComments().then((responseData) => {
@@ -35,40 +33,7 @@ fetchAndRenderComments().then((responseData) => {
   renderComments();
 });
 
-
-
 fetchAndRenderComments();
-
-export const initLikeButtonListeners = () => {
-  const likeButtons = document.querySelectorAll(".like-button");
-    for (const likeButton of likeButtons) {
-      const index = likeButton.dataset.index;
-        likeButton.addEventListener("click", (event) => {  
-          event.stopPropagation();
-          if (commentsArray[index].likeButtonClasses === 'like-button') {
-            commentsArray[index].likes += 1;
-            commentsArray[index].likeButtonClasses = 'like-button -active-like';
-            renderComments();
-          } else {
-            commentsArray[index].likes -= 1;
-            
-            commentsArray[index].likeButtonClasses = 'like-button';
-            renderComments();
-      }
-      })
-    
-                
-}}
-
-export const initCommentListeners = () => {
-  const commentButtons = document.querySelectorAll('.comment');
-  for (const commentButton of commentButtons) {
-    const index = commentButton.dataset.index;
-    commentButton.addEventListener('click', (event) => {
-      addFormText.value = '> ' + commentsArray[index].text + "\r\n" + commentsArray[index].name + ',';
-    })
-  }
-}
 
 addFormButton.addEventListener("click", () => {
   let a = 0;
