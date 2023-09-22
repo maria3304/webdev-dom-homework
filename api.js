@@ -1,9 +1,14 @@
 import { addFormName } from "./script.js";
 import { addFormText } from "./script.js";
 
+const host = "https://wedev-api.sky.pro/api/v2/:maria-nevshupa"
+
 export const fetchAndRenderComments = () => {
-    return fetch("https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments", {
+    return fetch(host, {
     method: "GET",
+    headers: {
+      Authorization: "Bearer bgc0b8awbwas6g5g5k5o5s5w606g37w3cc3bo3b83k39s3co3c83c03ck"
+    },
   }).then((response) => {
     return response.json();
   });
@@ -11,7 +16,7 @@ export const fetchAndRenderComments = () => {
 
 export const getFetch = () => {
   return fetch(
-    'https://wedev-api.sky.pro/api/v1/:maria-nevshupa/comments',
+    host,
     {
       method: 'POST',
       body: JSON.stringify({

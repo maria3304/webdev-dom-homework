@@ -14,6 +14,7 @@ const likesCounterElements = document.querySelectorAll('.likes-counter');
 const addForm = document.querySelector(".add-form");   
 export let commentsArray = [];
 
+let token = "Bearer ksdfsksdfjfsdjk";
 
 fetchAndRenderComments().then((responseData) => {
   console.log(responseData);
